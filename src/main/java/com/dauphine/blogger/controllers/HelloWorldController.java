@@ -1,4 +1,4 @@
-package com.dauphine.blogger;
+package com.dauphine.blogger.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
