@@ -1,5 +1,6 @@
 package com.dauphine.blogger.models;
 
+
 import java.util.UUID;
 
 public class Category {

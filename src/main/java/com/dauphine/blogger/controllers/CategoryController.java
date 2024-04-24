@@ -15,7 +15,14 @@ import java.util.UUID;
 )
 @RequestMapping("/v1/categories")
 public class CategoryController {
-    private final ArrayList<Category> categories=new ArrayList<>();
+    private final ArrayList<Category> categories;
+
+    public CategoryController(){
+        categories=new ArrayList<>();
+        categories.add(new Category(UUID.randomUUID(),"first CAT"));
+        categories.add(new Category(UUID.randomUUID(),"Second CAT"));
+        categories.add(new Category(UUID.randomUUID(),"Third CAT"));
+    }
 
 
     @GetMapping("")
@@ -24,8 +31,8 @@ public class CategoryController {
     };
 
     @GetMapping("/{id}")
-    public String GetIdCategorie(@PathVariable UUID id){
-        return "";
+    public Category GetIdCategorie(@PathVariable UUID id){
+        return GetidCategories(id);
     }
 
     @PostMapping("/{name}")
@@ -33,14 +40,30 @@ public class CategoryController {
         Category a= new Category();
         a.setNom(name);
         a.setId(UUID.randomUUID());
+        categories.add(a);
     }
 
     @PutMapping("/{name}/{id}")
     public void UpdateCategory(@PathVariable String name,@PathVariable UUID id){
-
+        Category a = GetidCategories(id);
+        if(a!=null){
+            a.setNom(name);
+        }
     }
     @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable UUID id){
+        Category a = GetidCategories(id);
+        if(a!=null){
+            categories.remove(a);
+        }
+    }
 
+    public Category GetidCategories(UUID id){
+        for(Category a :categories){
+            if(a.getId().equals(id)){
+                return a;
+            }
+        }
+        return null;
     }
 }

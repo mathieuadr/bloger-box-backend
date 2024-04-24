@@ -3,8 +3,10 @@ package com.dauphine.blogger.models;
 import com.dauphine.blogger.models.Category;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
+
 
 public class Post {
     private UUID id;
@@ -13,11 +15,11 @@ public class Post {
     private Timestamp date_création;
     private Category categorie;
 
-    public Post(UUID id,String title, String texte,Timestamp date_création,  Category categorie) {
+    public Post(UUID id,String title, String texte,  Category categorie) {
         this.id=id;
         this.Title = title;
         this.texte = texte;
-        this.date_création = date_création;
+        this.date_création = Timestamp.from(Instant.now());
         this.categorie = categorie;
     }
     public Post(){}
