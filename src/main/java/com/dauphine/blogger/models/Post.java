@@ -26,8 +26,7 @@ public class Post {
     @JoinColumn(name = "category_id")
     private Category categorie;
 
-    public Post(UUID id,String title, String Content,  Category categorie) {
-        this.id=id;
+    public Post(String title, String Content,  Category categorie) {
         this.Title = title;
         this.Content = Content;
         this.date_création = LocalDateTime.from(Instant.now());

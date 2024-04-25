@@ -1,5 +1,6 @@
 package com.dauphine.blogger.services.impl;
 
+import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.models.Post;
 import com.dauphine.blogger.repositories.CategoryRepository;
 import com.dauphine.blogger.repositories.PostRepository;
@@ -14,27 +15,28 @@ public class PostServicesImp implements PostServices {
 
     private final PostRepository repository;
 
-    public PostServicesImp(PostRepository rep){
-        this.repository=rep;
+    public PostServicesImp(PostRepository repository){
+        this.repository=repository;
     }
     @Override
     public List<Post> getAllByCategoryID(UUID Categoryid) {
-        return repository.fi();
+        return repository.findAllByCategoryId(Categoryid);
     }
 
     @Override
     public List<Post> getAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
     public Post getById(UUID id) {
-        return null;
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     public Post create(String title, String Content, UUID CategoryId) {
-        return null;
+        Post post = new Post(title,Content,CategoryId);
+        return repository.save(post);
     }
 
     @Override
