@@ -2,11 +2,13 @@ package com.dauphine.blogger.controllers;
 
 import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.models.Post;
+import com.dauphine.blogger.services.PostServices;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -18,50 +20,43 @@ import java.util.UUID;
 )
 @RequestMapping("/v1/posts")
 public class PostController {
-    private final ArrayList<Post> Posts;
+    private final PostServices Posts;
 
-    public PostController(){
-        Posts=new ArrayList<>();
-        Posts.add(new Post(UUID.randomUUID(),"Post 1","Mon premier post", new Category(UUID.randomUUID(),"1")));
-        Posts.add(new Post(UUID.randomUUID(),"Post 2","Mon premier post", new Category(UUID.randomUUID(),"2")));
+    public PostController(PostServices Posts){
+        this.Posts=Posts;
+
     }
 
 
 
 
     @GetMapping("")
-    public ArrayList<Post> getallcategories(){
-        return Posts;
+    public List<Post> getallcategories(){
+
+        return Posts.getAll();
     };
 
     @GetMapping("/{id}")
-    public String GetIdCategorie(@PathVariable int id){
-        return "";
+    public List<Post> GetIdCategorie(@PathVariable UUID id){
+        return Posts.getAllByCategoryID(id);
     }
 
-    @PostMapping("/{name}")
-    public void CreateCategory(@PathVariable String name){
-        Post a= new Post();
+    @PostMapping("/{name}/{content}")
+    public Post CreatePost(@PathVariable String name,@PathVariable String content){
+       return Posts.create(name,content,UUID.randomUUID());
 
     }
 
-    @PutMapping("/{name}/{id}")
-    public void UpdateCategory(@PathVariable String name,@PathVariable int id){
+    @PutMapping("/{name}/{id}/{content}")
+    public Post UpdateCategory(@PathVariable String name,@PathVariable UUID id,@PathVariable String content){
+        return Posts.update(id,name,content);
 
     }
     @DeleteMapping("/{id}")
-    public void deleteCategory(@PathVariable int id){
-
+    public Boolean deleteCategory(@PathVariable UUID id){
+        return Posts.deleteByID(id);
     }
 
 
-    public Post getIdControllers(UUID id){
-            for(Post a :Posts){
-                if(a.getId().equals(id)){
-                    return a;
-                }
-            }
-            return null;
-        }
-    }
+
 }

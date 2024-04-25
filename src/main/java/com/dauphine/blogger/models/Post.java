@@ -1,9 +1,11 @@
 package com.dauphine.blogger.models;
 
 import com.dauphine.blogger.models.Category;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,14 +14,14 @@ public class Post {
     private UUID id;
     private String Title;
     private String texte;
-    private Timestamp date_création;
+    private LocalDateTime date_création;
     private Category categorie;
 
     public Post(UUID id,String title, String texte,  Category categorie) {
         this.id=id;
         this.Title = title;
         this.texte = texte;
-        this.date_création = Timestamp.from(Instant.now());
+        this.date_création = LocalDateTime.from(Instant.now());
         this.categorie = categorie;
     }
     public Post(){}
@@ -40,11 +42,11 @@ public class Post {
         this.texte = texte;
     }
 
-    public Date getDate_création() {
+    public LocalDateTime getDate_création() {
         return date_création;
     }
 
-    public void setDate_création(Timestamp date_création) {
+    public void setDate_création(LocalDateTime date_création) {
         this.date_création = date_création;
     }
 

@@ -2,10 +2,11 @@ package com.dauphine.blogger.controllers;
 
 import com.dauphine.blogger.dto.CreationCategoryRequest;
 import com.dauphine.blogger.models.Category;
+import com.dauphine.blogger.services.CategoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -15,55 +16,36 @@ import java.util.UUID;
 )
 @RequestMapping("/v1/categories")
 public class CategoryController {
-    private final ArrayList<Category> categories;
+    private final CategoryService service;
 
-    public CategoryController(){
-        categories=new ArrayList<>();
-        categories.add(new Category(UUID.randomUUID(),"first CAT"));
-        categories.add(new Category(UUID.randomUUID(),"Second CAT"));
-        categories.add(new Category(UUID.randomUUID(),"Third CAT"));
+
+    public CategoryController(CategoryService services){
+            this.service=services;
     }
 
 
     @GetMapping("")
-    public ArrayList<Category> getallcategories(){
-        return categories;
+    public List<Category> getallcategories(){
+        return service.getAll();
     };
 
     @GetMapping("/{id}")
     public Category GetIdCategorie(@PathVariable UUID id){
-        return GetidCategories(id);
+        return service.getByID(id);
     }
 
     @PostMapping("/{name}")
-    public void CreateCategory(@PathVariable String name){
-        Category a= new Category();
-        a.setNom(name);
-        a.setId(UUID.randomUUID());
-        categories.add(a);
+    public Category CreateCategory(@PathVariable String name, @RequestBody CreationCategoryRequest Category){
+        return service.Create(Category.getName());
     }
 
     @PutMapping("/{name}/{id}")
-    public void UpdateCategory(@PathVariable String name,@PathVariable UUID id){
-        Category a = GetidCategories(id);
-        if(a!=null){
-            a.setNom(name);
-        }
+    public Category UpdateCategory(@PathVariable String name,@PathVariable UUID id){
+        return service.update(id,name);
     }
     @DeleteMapping("/{id}")
-    public void deleteCategory(@PathVariable UUID id){
-        Category a = GetidCategories(id);
-        if(a!=null){
-            categories.remove(a);
-        }
+    public Category deleteCategory(@PathVariable UUID id){
+        return service.deleteByID(id);
     }
 
-    public Category GetidCategories(UUID id){
-        for(Category a :categories){
-            if(a.getId().equals(id)){
-                return a;
-            }
-        }
-        return null;
-    }
 }

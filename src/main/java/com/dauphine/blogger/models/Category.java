@@ -10,6 +10,7 @@ public class Category {
     public Category(UUID id, String nom) {
         this.id = id;
         Nom = nom;
+
     }
     public Category(){}
 
