@@ -1,15 +1,24 @@
 package com.dauphine.blogger.models;
 
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.util.UUID;
 
+@Entity
+@Table(name="category")
 public class Category {
+    @Id
+    @Column(name="id")
     private UUID id;
-    private String Nom;
+    @Column(name="name")
+    private String name;
 
-    public Category(UUID id, String nom) {
-        this.id = id;
-        Nom = nom;
+    public Category( String name) {
+        name = name;
 
     }
     public Category(){}
@@ -22,11 +31,11 @@ public class Category {
         this.id = id;
     }
 
-    public String getNom() {
-        return Nom;
+    public String getname() {
+        return name;
     }
 
-    public void setNom(String nom) {
-        Nom = nom;
+    public void setname(String name) {
+        name = name;
     }
 }

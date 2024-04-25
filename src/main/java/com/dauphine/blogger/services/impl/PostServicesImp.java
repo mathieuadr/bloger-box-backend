@@ -1,6 +1,8 @@
 package com.dauphine.blogger.services.impl;
 
 import com.dauphine.blogger.models.Post;
+import com.dauphine.blogger.repositories.CategoryRepository;
+import com.dauphine.blogger.repositories.PostRepository;
 import com.dauphine.blogger.services.PostServices;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +11,15 @@ import java.util.UUID;
 
 @Service
 public class PostServicesImp implements PostServices {
+
+    private final PostRepository repository;
+
+    public PostServicesImp(PostRepository rep){
+        this.repository=rep;
+    }
     @Override
     public List<Post> getAllByCategoryID(UUID Categoryid) {
-        return null;
+        return repository.fi();
     }
 
     @Override
