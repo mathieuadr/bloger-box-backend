@@ -14,12 +14,13 @@ import java.util.UUID;
 @Table(name="post")
 public class Post {
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO) // Ou GenerationType.UUID si disponible
+    @Column(name = "id", columnDefinition = "UUID")
     private UUID id;
     @Column(name = "title")
     private String Title;
     @Column(name = "content")
-    private String Content;    @Id
+    private String Content;
     @Column(name = "created_date")
     private LocalDateTime date_création;
     @ManyToOne
@@ -29,7 +30,7 @@ public class Post {
     public Post(String title, String Content,  Category categorie) {
         this.Title = title;
         this.Content = Content;
-        this.date_création = LocalDateTime.from(Instant.now());
+        this.date_création = LocalDateTime.now();
         this.categorie = categorie;
     }
     public Post(){}

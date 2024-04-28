@@ -14,13 +14,15 @@ import java.util.UUID;
 public class PostServicesImp implements PostServices {
 
     private final PostRepository repository;
+    private final CategoryRepository repositoryCat;
 
-    public PostServicesImp(PostRepository repository){
+    public PostServicesImp(PostRepository repository,CategoryRepository repositoryCat){
         this.repository=repository;
+        this.repositoryCat=repositoryCat;
     }
     @Override
     public List<Post> getAllByCategoryID(UUID Categoryid) {
-        return repository.findAllByCategoryId(Categoryid);
+        return repository.findAllByCategorieId(Categoryid);
     }
 
     @Override
@@ -35,17 +37,25 @@ public class PostServicesImp implements PostServices {
 
     @Override
     public Post create(String title, String Content, UUID CategoryId) {
-        Post post = new Post(title,Content,CategoryId);
+        Category category=repositoryCat.findById(CategoryId).orElse(null);
+        Post post = new Post(title,Content,category);
         return repository.save(post);
     }
 
     @Override
     public Post update(UUID id, String Title, String Content) {
-        return null;
+        Post post =repository.findById(id).orElse(null);
+        if (post==null){
+            return null;
+        }
+        post.setTitle(Title);
+        post.setContent(Content);
+        return repository.save(post);
     }
 
     @Override
     public Boolean deleteByID(UUID id) {
-        return null;
+        repository.deleteById(id);
+        return true;
     }
 }

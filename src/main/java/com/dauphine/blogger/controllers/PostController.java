@@ -24,7 +24,6 @@ public class PostController {
 
     public PostController(PostServices Posts){
         this.Posts=Posts;
-
     }
 
 
@@ -41,9 +40,9 @@ public class PostController {
         return Posts.getAllByCategoryID(id);
     }
 
-    @PostMapping("/{name}/{content}")
-    public Post CreatePost(@PathVariable String name,@PathVariable String content){
-       return Posts.create(name,content,UUID.randomUUID());
+    @PostMapping("/{name}/{content}/{categorie}")
+    public Post CreatePost(@PathVariable String name,@PathVariable String content,@PathVariable UUID categorie){
+       return Posts.create(name,content,categorie);
 
     }
 
