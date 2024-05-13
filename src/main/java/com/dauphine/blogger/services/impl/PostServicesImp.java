@@ -58,4 +58,9 @@ public class PostServicesImp implements PostServices {
         repository.deleteById(id);
         return true;
     }
+
+    @Override
+    public List<Post> getAllByCategorieName(String name) {
+        return repository.findAllByCategoryName(name);
+    }
 }

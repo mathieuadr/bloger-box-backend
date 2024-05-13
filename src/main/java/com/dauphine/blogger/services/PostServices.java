@@ -11,6 +11,7 @@ import java.util.UUID;
 public interface PostServices {
     List<Post> getAllByCategoryID(UUID Categoryid);
 
+
     List<Post>getAll();
 
     Post getById(UUID id);
@@ -20,4 +21,6 @@ public interface PostServices {
     Post update(UUID id, String Title, String Content);
 
     Boolean deleteByID(UUID id);
+
+    List<Post> getAllByCategorieName(String name);
 }

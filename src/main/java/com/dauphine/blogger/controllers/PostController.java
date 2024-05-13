@@ -56,6 +56,9 @@ public class PostController {
         return Posts.deleteByID(id);
     }
 
-
+    @GetMapping("/by-name/{Category_Name}")
+    public List<Post> GetNameCategorie(@PathVariable String Category_Name){
+        return Posts.getAllByCategorieName(Category_Name);
+    }
 
 }
