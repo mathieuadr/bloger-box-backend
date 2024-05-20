@@ -30,7 +30,7 @@ public class CategoryController {
     };
 
     @GetMapping("/{id}")
-    public Category GetIdCategorie(@PathVariable UUID id){
+    public Category GetIdCategory(@PathVariable UUID id){
         return service.getByID(id);
     }
 

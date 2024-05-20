@@ -11,10 +11,10 @@ import java.util.UUID;
 
 public interface PostRepository extends JpaRepository<Post, UUID> {
 
-    List<Post> findAllByCategorieId(UUID categoryId);
+    List<Post> findAllByCategoryId(UUID categoryId);
 
 
-    @Query("SELECT post FROM Post post WHERE post.categorie.id IN (SELECT category.id FROM Category category WHERE UPPER(category.name) LIKE UPPER(CONCAT('%', :name, '%')))")
+    @Query("SELECT post FROM Post post WHERE post.category.id IN (SELECT category.id FROM Category category WHERE UPPER(category.name) LIKE UPPER(CONCAT('%', :name, '%')))")
     List<Post> findAllByCategoryName(@Param("name") String name);
 
 

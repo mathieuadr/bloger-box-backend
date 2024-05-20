@@ -1,13 +1,8 @@
 package com.dauphine.blogger.models;
 
-import com.dauphine.blogger.models.Category;
 import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -25,13 +20,13 @@ public class Post {
     private LocalDateTime date_création;
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category categorie;
+    private Category category;
 
-    public Post(String title, String Content,  Category categorie) {
+    public Post(String title, String Content,  Category category) {
         this.Title = title;
         this.Content = Content;
         this.date_création = LocalDateTime.now();
-        this.categorie = categorie;
+        this.category = category;
     }
     public Post(){}
 
@@ -59,8 +54,8 @@ public class Post {
         this.date_création = date_création;
     }
 
-    public Category getCategorie() {
-        return categorie;
+    public Category getCategory() {
+        return category;
     }
 
     public UUID getId() {
@@ -71,7 +66,7 @@ public class Post {
         this.id = id;
     }
 
-    public void setCategorie(Category categorie) {
-        this.categorie = categorie;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

@@ -22,5 +22,5 @@ public interface PostServices {
 
     Boolean deleteByID(UUID id);
 
-    List<Post> getAllByCategorieName(String name);
+    List<Post> getAllByCategoryName(String name);
 }

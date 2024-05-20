@@ -36,13 +36,13 @@ public class PostController {
     };
 
     @GetMapping("/{id}")
-    public List<Post> GetIdCategorie(@PathVariable UUID id){
+    public List<Post> GetIdCategory(@PathVariable UUID id){
         return Posts.getAllByCategoryID(id);
     }
 
-    @PostMapping("/{name}/{content}/{categorie}")
-    public Post CreatePost(@PathVariable String name,@PathVariable String content,@PathVariable UUID categorie){
-       return Posts.create(name,content,categorie);
+    @PostMapping("/{name}/{content}/{category}")
+    public Post CreatePost(@PathVariable String name,@PathVariable String content,@PathVariable UUID category){
+       return Posts.create(name,content,category);
 
     }
 
@@ -57,8 +57,8 @@ public class PostController {
     }
 
     @GetMapping("/by-name/{Category_Name}")
-    public List<Post> GetNameCategorie(@PathVariable String Category_Name){
-        return Posts.getAllByCategorieName(Category_Name);
+    public List<Post> GetNameCategory(@PathVariable String Category_Name){
+        return Posts.getAllByCategoryName(Category_Name);
     }
 
 }

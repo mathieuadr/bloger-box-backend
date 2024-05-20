@@ -22,7 +22,7 @@ public class PostServicesImp implements PostServices {
     }
     @Override
     public List<Post> getAllByCategoryID(UUID Categoryid) {
-        return repository.findAllByCategorieId(Categoryid);
+        return repository.findAllByCategoryId(Categoryid);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class PostServicesImp implements PostServices {
     }
 
     @Override
-    public List<Post> getAllByCategorieName(String name) {
+    public List<Post> getAllByCategoryName(String name) {
         return repository.findAllByCategoryName(name);
     }
 }
