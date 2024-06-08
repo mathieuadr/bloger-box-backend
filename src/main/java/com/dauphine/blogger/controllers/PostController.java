@@ -1,64 +1,83 @@
 package com.dauphine.blogger.controllers;
 
+import com.dauphine.blogger.ExceptionHandler.Exception.CategoryNotFoundByIdException;
+import com.dauphine.blogger.ExceptionHandler.Exception.PostNotFoundByIdException;
 import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.models.Post;
 import com.dauphine.blogger.services.PostServices;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
-
 @RestController
-@Tag(
-        name="Post Controller API",
-        description = "Permit to control the Post"
-)
+@Tag(name="Post Controller API", description = "Permit to control the Post")
 @RequestMapping("/v1/posts")
 public class PostController {
-    private final PostServices Posts;
+    private final PostServices posts;
 
-    public PostController(PostServices Posts){
-        this.Posts=Posts;
+    public PostController(PostServices posts){
+        this.posts = posts;
     }
-
-
-
 
     @GetMapping("")
-    public List<Post> getallcategories(){
-
-        return Posts.getAll();
-    };
+    @Operation(summary = "Get all posts", description = "Retrieve a list of all posts")
+    @ApiResponse(responseCode = "200", description = "Successful retrieval of posts",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Post.class)))
+    public List<Post> getallcategories() {
+        return posts.getAll();
+    }
 
     @GetMapping("/{id}")
-    public List<Post> GetIdCategory(@PathVariable UUID id){
-        return Posts.getAllByCategoryID(id);
+    @Operation(summary = "Get posts by post ID", description = "Retrieve all posts associated with a category ID")
+
+    @ApiResponse(responseCode = "200", description = "Posts found",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Post.class)))
+    public Post getId(@PathVariable UUID id) throws PostNotFoundByIdException{
+        return posts.getById(id);
     }
 
-    @PostMapping("/{name}/{content}/{category}")
-    public Post CreatePost(@PathVariable String name,@PathVariable String content,@PathVariable UUID category){
-       return Posts.create(name,content,category);
-
+    @PostMapping("")
+    @Operation(summary = "Create a new post", description = "Creates a new post with the provided name, content, and category ID")
+    @ApiResponse(responseCode = "201", description = "Post created",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Post.class)))
+    public Post createPost(@RequestBody Post post) throws CategoryNotFoundByIdException {
+        return posts.create(post.getTitle(), post.getContent(), post.getCategory().getId());
     }
 
-    @PutMapping("/{name}/{id}/{content}")
-    public Post UpdateCategory(@PathVariable String name,@PathVariable UUID id,@PathVariable String content){
-        return Posts.update(id,name,content);
-
+    @PutMapping("/{id}/{Title}/{content}/{category}")
+    @Operation(summary = "Update a post", description = "Updates an existing post with a new name and content")
+    @ApiResponse(responseCode = "200", description = "Post updated",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Post.class)))
+    public Post updatePost(@PathVariable UUID id, @RequestBody Post post) throws PostNotFoundByIdException {
+        return posts.update(id, post.getTitle(), post.getContent());
     }
+
     @DeleteMapping("/{id}")
-    public Boolean deleteCategory(@PathVariable UUID id){
-        return Posts.deleteByID(id);
+    @Operation(summary = "Delete a post", description = "Deletes a post by its ID")
+    @ApiResponse(responseCode = "200", description = "Post deleted",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Boolean.class)))
+    public Boolean deletePost(@PathVariable UUID id) throws PostNotFoundByIdException{
+        return posts.deleteByID(id);
     }
 
-    @GetMapping("/by-name/{Category_Name}")
-    public List<Post> GetNameCategory(@PathVariable String Category_Name){
-        return Posts.getAllByCategoryName(Category_Name);
+    @GetMapping("/by-name/{categoryName}")
+    @Operation(summary = "Get posts by category name", description = "Retrieve all posts associated with a category name")
+    @ApiResponse(responseCode = "200", description = "Posts found",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Post.class)))
+    public List<Post> getPostsByCategoryName(@PathVariable("categoryName") String categoryName) {
+        return posts.getAllByCategoryName(categoryName);
     }
-
 }

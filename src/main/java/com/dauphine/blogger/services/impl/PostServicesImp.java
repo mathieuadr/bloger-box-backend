@@ -1,5 +1,7 @@
 package com.dauphine.blogger.services.impl;
 
+import com.dauphine.blogger.ExceptionHandler.Exception.CategoryNotFoundByIdException;
+import com.dauphine.blogger.ExceptionHandler.Exception.PostNotFoundByIdException;
 import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.models.Post;
 import com.dauphine.blogger.repositories.CategoryRepository;
@@ -21,7 +23,7 @@ public class PostServicesImp implements PostServices {
         this.repositoryCat=repositoryCat;
     }
     @Override
-    public List<Post> getAllByCategoryID(UUID Categoryid) {
+    public List<Post> getAllByCategoryID(UUID Categoryid)throws CategoryNotFoundByIdException {
         return repository.findAllByCategoryId(Categoryid);
     }
 
@@ -31,23 +33,20 @@ public class PostServicesImp implements PostServices {
     }
 
     @Override
-    public Post getById(UUID id) {
-        return repository.findById(id).orElse(null);
+    public Post getById(UUID id) throws PostNotFoundByIdException {
+        return repository.findById(id).orElseThrow(()->new PostNotFoundByIdException(id));
     }
 
     @Override
-    public Post create(String title, String Content, UUID CategoryId) {
-        Category category=repositoryCat.findById(CategoryId).orElse(null);
+    public Post create(String title, String Content, UUID CategoryId) throws CategoryNotFoundByIdException {
+        Category category=repositoryCat.getById(CategoryId);
         Post post = new Post(title,Content,category);
         return repository.save(post);
     }
 
     @Override
-    public Post update(UUID id, String Title, String Content) {
-        Post post =repository.findById(id).orElse(null);
-        if (post==null){
-            return null;
-        }
+    public Post update(UUID id, String Title, String Content) throws PostNotFoundByIdException {
+        Post post =getById(id);
         post.setTitle(Title);
         post.setContent(Content);
         return repository.save(post);
