@@ -8,7 +8,6 @@ public class CreationPostRequest {
     private String Title;
     private String content;
 
-    private LocalDateTime date_creation;
     private Category category;
 
     public void setTitle(String title) {
@@ -19,9 +18,6 @@ public class CreationPostRequest {
         this.content = content;
     }
 
-    public void setDate_creation(LocalDateTime date_creation) {
-        this.date_creation = date_creation;
-    }
 
     public void setCategory(Category category) {
         this.category = category;
@@ -35,9 +31,6 @@ public class CreationPostRequest {
         return content;
     }
 
-    public LocalDateTime getDate_creation() {
-        return date_creation;
-    }
 
     public Category getCategory() {
         return category;

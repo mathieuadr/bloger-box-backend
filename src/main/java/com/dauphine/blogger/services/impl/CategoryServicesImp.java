@@ -1,5 +1,6 @@
 package com.dauphine.blogger.services.impl;
 
+import com.dauphine.blogger.ExceptionHandler.Exception.CategoryExistingNameException;
 import com.dauphine.blogger.ExceptionHandler.Exception.CategoryNotFoundByIdException;
 import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.repositories.CategoryRepository;
@@ -27,27 +28,31 @@ public class CategoryServicesImp implements CategoryService {
         //TEST 02 : Get with invalid ID
         return repository.findById(id).orElseThrow(()-> new CategoryNotFoundByIdException(id));
     }
+    public void CheckName(String Name) throws CategoryExistingNameException{
+        if (repository.findByName(Name) != null) {
+            throw new CategoryExistingNameException(Name);
+        }
+    };
 
     @Override
-    public Category Create(String name) {
+    public Category Create(String name) throws CategoryExistingNameException {
         // TEST 01 : Name pas pris
         // TEST 02 : Name deja pris
+        CheckName(name);
         Category cat = new Category(name);
         return repository.save(cat);
     }
 
     @Override
-    public Category update(UUID id, String name) throws CategoryNotFoundByIdException {
-
+    public Category update(UUID id, String name) throws CategoryNotFoundByIdException,CategoryExistingNameException {
         Category cat = getByID(id);
-        if (cat==null){
-            return null;
-        }
+        CheckName(name);
         cat.setname(name);
         return repository.save(cat);
     }
     @Override
-    public Boolean deleteByID(UUID id) {
+    public Boolean deleteByID(UUID id) throws CategoryNotFoundByIdException{
+        getByID(id);
         repository.deleteById(id);
         return true;
     }

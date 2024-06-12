@@ -1,24 +1,23 @@
 package com.dauphine.blogger.models;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
 @Entity
 @Table(name="category")
 public class Category {
+
     @Id
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.AUTO) // Ou GenerationType.UUID si disponible
+    @Column(name = "id", columnDefinition = "UUID")
     private UUID id;
     @Column(name="name")
     private String name;
 
     public Category( String name) {
-        name = name;
+        this.name = name;
 
     }
     public Category(){}
@@ -36,6 +35,6 @@ public class Category {
     }
 
     public void setname(String name) {
-        name = name;
+        this.name = name;
     }
 }

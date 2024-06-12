@@ -1,7 +1,9 @@
 package com.dauphine.blogger.controllers;
 
+import com.dauphine.blogger.ExceptionHandler.Exception.CategoryExistingNameException;
 import com.dauphine.blogger.ExceptionHandler.Exception.CategoryNotFoundByIdException;
 import com.dauphine.blogger.dto.CreationCategoryRequest;
+import com.dauphine.blogger.dto.UpdateCategoryRequest;
 import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.services.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,13 +47,13 @@ public class CategoryController {
         return ResponseEntity.ok(cat);
     }
 
-    @PostMapping("")
+    @PostMapping("/create")
     @Operation(summary = "Create a new category", description = "Creates a new category with the given details")
     @ApiResponse(responseCode = "201", description = "Category created",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Category.class)))
-    public Category createCategory(@RequestBody CreationCategoryRequest category) {
-        return service.Create(category.getName());
+                    schema = @Schema(implementation = CreationCategoryRequest.class)))
+    public ResponseEntity<Category> createCategory(@RequestBody CreationCategoryRequest category)throws CategoryExistingNameException {
+        return ResponseEntity.ok(service.Create(category.getName()));
     }
 
     @PutMapping("/{id}/{name}")
@@ -59,9 +61,9 @@ public class CategoryController {
 
     @ApiResponse(responseCode = "200", description = "Category updated",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Category.class)))
-    public Category updateCategory(@PathVariable UUID id, @PathVariable String name) throws CategoryNotFoundByIdException{
-        return service.update(id, name);
+                    schema = @Schema(implementation = UpdateCategoryRequest.class)))
+    public ResponseEntity<Category> updateCategory(@RequestBody UpdateCategoryRequest cat) throws CategoryNotFoundByIdException, CategoryExistingNameException{
+        return ResponseEntity.ok(service.update(cat.getId(), cat.getName()));
     }
 
     @DeleteMapping("/{id}")
@@ -69,7 +71,7 @@ public class CategoryController {
         @ApiResponse(responseCode = "200", description = "Category deleted",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = Boolean.class)))
-    public Boolean deleteCategory(@PathVariable UUID id) throws CategoryNotFoundByIdException{
-        return service.deleteByID(id);
+    public ResponseEntity<Boolean> deleteCategory(@PathVariable UUID id) throws CategoryNotFoundByIdException{
+        return ResponseEntity.ok(service.deleteByID(id));
     }
 }

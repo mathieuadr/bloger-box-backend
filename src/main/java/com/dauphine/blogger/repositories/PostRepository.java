@@ -13,6 +13,8 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 
     List<Post> findAllByCategoryId(UUID categoryId);
 
+    @Query("SELECT post FROM Post post WHERE post.Title=:title")
+    Post findByTitle(String title);
 
     @Query("SELECT post FROM Post post WHERE post.category.id IN (SELECT category.id FROM Category category WHERE UPPER(category.name) LIKE UPPER(CONCAT('%', :name, '%')))")
     List<Post> findAllByCategoryName(@Param("name") String name);

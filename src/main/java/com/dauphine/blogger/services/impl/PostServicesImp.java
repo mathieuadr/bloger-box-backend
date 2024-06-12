@@ -1,6 +1,7 @@
 package com.dauphine.blogger.services.impl;
 
 import com.dauphine.blogger.ExceptionHandler.Exception.CategoryNotFoundByIdException;
+import com.dauphine.blogger.ExceptionHandler.Exception.PostExistingNameException;
 import com.dauphine.blogger.ExceptionHandler.Exception.PostNotFoundByIdException;
 import com.dauphine.blogger.models.Category;
 import com.dauphine.blogger.models.Post;
@@ -38,22 +39,36 @@ public class PostServicesImp implements PostServices {
     }
 
     @Override
-    public Post create(String title, String Content, UUID CategoryId) throws CategoryNotFoundByIdException {
-        Category category=repositoryCat.getById(CategoryId);
+    public void CheckTitle(String title) throws PostExistingNameException {
+        Post post = repository.findByTitle(title);
+        if(post!=null){
+            throw new PostExistingNameException(title);
+        }
+
+    }
+
+    @Override
+    public Post create(String title, String Content, UUID CategoryId) throws CategoryNotFoundByIdException,PostExistingNameException {
+        CheckTitle(title);
+        Category category=repositoryCat.findById(CategoryId).orElseThrow(()-> new CategoryNotFoundByIdException(CategoryId));
         Post post = new Post(title,Content,category);
         return repository.save(post);
     }
 
     @Override
-    public Post update(UUID id, String Title, String Content) throws PostNotFoundByIdException {
+    public Post update(UUID id,String title, Category Cat, String Content) throws PostNotFoundByIdException,PostExistingNameException,CategoryNotFoundByIdException {
+        CheckTitle(title);
+        Category category=repositoryCat.findById(Cat.getId()).orElseThrow(()-> new CategoryNotFoundByIdException(Cat.getId()));
         Post post =getById(id);
-        post.setTitle(Title);
+        post.setCategory(Cat);
+        post.setTitle(title);
         post.setContent(Content);
         return repository.save(post);
     }
 
     @Override
-    public Boolean deleteByID(UUID id) {
+    public Boolean deleteByID(UUID id) throws PostNotFoundByIdException{
+        getById(id);
         repository.deleteById(id);
         return true;
     }
