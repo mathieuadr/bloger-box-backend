@@ -20,6 +20,4 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     List<Post> findAllByCategoryName(@Param("name") String name);
 
 
-
-
 }

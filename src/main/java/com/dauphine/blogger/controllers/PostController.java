@@ -85,4 +85,5 @@ public class PostController {
     public List<Post> getPostsByCategoryName(@PathVariable("categoryName") String categoryName) {
         return posts.getAllByCategoryName(categoryName);
     }
+
 }

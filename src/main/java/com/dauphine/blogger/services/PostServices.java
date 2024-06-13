@@ -28,4 +28,6 @@ public interface PostServices {
     Boolean deleteByID(UUID id)throws PostNotFoundByIdException;
 
     List<Post> getAllByCategoryName(String name) ;
+
+
 }

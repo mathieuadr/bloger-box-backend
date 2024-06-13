@@ -77,4 +77,6 @@ public class PostServicesImp implements PostServices {
     public List<Post> getAllByCategoryName(String name) {
         return repository.findAllByCategoryName(name);
     }
+
+
 }
